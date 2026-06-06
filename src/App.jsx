@@ -1044,18 +1044,40 @@ function GlobalStyle() {
       @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
       html, body, #root {
         font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+      }
+      body {
+        position: relative;
+        overscroll-behavior-x: none;
+        touch-action: pan-y;
       }
       .font-mono {
         font-family: "SF Mono", "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, monospace;
       }
       * { box-sizing: border-box; }
-      html, body { overflow-x: hidden; }
       @media (max-width: 767px) {
+        html, body, #root {
+          width: 100vw;
+          max-width: 100vw;
+          overflow-x: hidden !important;
+        }
         body { -webkit-text-size-adjust: 100%; }
-        header nav { width: 100%; overflow-x: auto; scrollbar-width: none; }
+        main, article, section, header { max-width: 100vw; overflow-x: hidden; }
+        header nav {
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          scrollbar-width: none;
+          display: grid !important;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
         header nav::-webkit-scrollbar { display: none; }
-        header nav button { flex: 1 0 auto; font-size: 12px !important; padding: 8px 10px !important; }
+        header nav button { min-width: 0; flex: 1 1 0; font-size: 12px !important; padding: 8px 6px !important; }
         img, video, iframe { max-width: 100%; }
+        .mobile-no-x { overflow-x: hidden !important; max-width: 100vw !important; }
       }
     `}</style>
   );
@@ -1123,7 +1145,7 @@ function TopNav({ view, setView, year, setYear, showKo, setShowKo }) {
         color: dark ? "#fff" : "#000",
       }}
     >
-      <div className={cx("mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2.5 md:gap-4 md:px-4 md:py-3", isMobile && "flex-wrap")}>
+      <div className={cx("mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-3 py-2.5 md:gap-4 md:px-4 md:py-3", isMobile && "flex-wrap overflow-hidden")}>
         <button onClick={() => setView("map")} className="flex items-center gap-2 text-sm font-semibold">
           <Sparkles size={18} />
           <span className="hidden sm:inline">Sasang OS</span>
@@ -1848,7 +1870,7 @@ function ArticleMethodSection({ dark, isMobile = false }) {
         </div>
       </aside>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 22, minWidth: 0, maxWidth: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 22, minWidth: 0, maxWidth: "100%", overflowX: "hidden" }}>
         <div>
           <p className={cx("font-mono text-xs uppercase tracking-[0.24em]", dark ? "text-white/45" : "text-black/35")}>Method / Driver Reading</p>
           <h2 className={cx("mt-4 font-semibold tracking-[-0.07em]", isMobile ? "text-4xl" : "text-5xl")}>From Matrix to Scenario Logic</h2>
@@ -1960,44 +1982,82 @@ function ArticleMethodSection({ dark, isMobile = false }) {
           </div>
         </div>
 
-        <div style={{ borderRadius: 34, padding: isMobile ? 18 : 24, background: dark ? "rgba(255,255,255,.075)" : "rgba(0,0,0,.035)" }}>
+        <div style={{ borderRadius: 34, padding: isMobile ? 18 : 24, background: dark ? "rgba(255,255,255,.075)" : "rgba(0,0,0,.035)", overflowX: "hidden", maxWidth: "100%" }}>
           <p className={cx("font-mono text-[10px] uppercase tracking-[0.22em]", dark ? "text-white/45" : "text-black/35")}>Mechanism Builder</p>
           <h3 className={cx("mt-3 font-semibold tracking-[-0.06em]", isMobile ? "text-3xl" : "text-4xl")}>How the Four Sectors Are Derived</h3>
           <p className={cx("mt-4 text-sm leading-7", dark ? "text-white/62" : "text-black/58")}>
             Instead of stacked cards, this mechanism works as a horizontal translation line: driver value → causal machine → spatial collision → sector output.
           </p>
 
-          <div style={{ marginTop: 24, overflowX: "auto", paddingBottom: 12, WebkitOverflowScrolling: "touch" }}>
+          <div style={{ marginTop: 24, overflowX: isMobile ? "visible" : "auto", paddingBottom: 12, WebkitOverflowScrolling: "touch" }}>
             <div style={{ minWidth: isMobile ? "100%" : 1160, maxWidth: "100%" }}>
-              <div style={{ position: "relative", height: isMobile ? 430 : 120 }}>
-                <div
-                  style={
-                    isMobile
-                      ? { position: "absolute", left: "50%", top: 28, bottom: 28, width: 2, transform: "translateX(-50%)", background: dark ? "rgba(255,255,255,.22)" : "rgba(0,0,0,.16)" }
-                      : { position: "absolute", left: 42, right: 42, top: 56, height: 2, background: dark ? "rgba(255,255,255,.28)" : "rgba(0,0,0,.20)" }
-                  }
-                />
-                {mechanismNodes.map((node, index) => (
-                  <div
-                    key={node.no}
-                    style={{
-                      position: "absolute",
-                      left: isMobile ? "50%" : `${7 + index * 28}%`,
-                      top: isMobile ? index * 102 : 0,
-                      transform: "translateX(-50%)",
-                      width: isMobile ? "min(100%, 280px)" : 230,
-                      textAlign: "center",
-                    }}
-                  >
-                    <div style={{ margin: "0 auto", width: 54, height: 54, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: dark ? "#fff" : "#000", color: dark ? "#000" : "#fff", fontWeight: 900, boxShadow: "0 14px 32px rgba(0,0,0,.18)" }}>
-                      {node.no}
+              {isMobile ? (
+                <div style={{ display: "grid", gap: 12 }}>
+                  {mechanismNodes.map((node) => (
+                    <div
+                      key={node.no}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "48px minmax(0, 1fr)",
+                        gap: 12,
+                        alignItems: "start",
+                        borderRadius: 22,
+                        padding: 14,
+                        background: dark ? "rgba(255,255,255,.075)" : "#fff",
+                        boxShadow: dark ? "none" : "0 8px 24px rgba(15,23,42,.06)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 42,
+                          height: 42,
+                          borderRadius: 999,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: dark ? "#fff" : "#000",
+                          color: dark ? "#000" : "#fff",
+                          fontSize: 13,
+                          fontWeight: 900,
+                          lineHeight: 1,
+                          boxShadow: "0 10px 24px rgba(0,0,0,.16)",
+                        }}
+                      >
+                        {node.no}
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <p className="font-mono text-[9px] uppercase tracking-[0.16em] opacity-45">{node.title}</p>
+                        <p className="mt-1 text-sm font-semibold leading-5 break-words">{node.main}</p>
+                        <p className={cx("mt-1 text-xs leading-5 break-words", dark ? "text-white/50" : "text-black/48")}>{node.sub}</p>
+                      </div>
                     </div>
-                    <p className="mt-3 font-mono text-[9px] uppercase tracking-[0.18em] opacity-45">{node.title}</p>
-                    <p className="mt-1 text-sm font-semibold leading-5">{node.main}</p>
-                    <p className={cx("mt-1 text-xs leading-5", dark ? "text-white/50" : "text-black/48")}>{node.sub}</p>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ position: "relative", height: 120 }}>
+                  <div style={{ position: "absolute", left: 42, right: 42, top: 56, height: 2, background: dark ? "rgba(255,255,255,.28)" : "rgba(0,0,0,.20)" }} />
+                  {mechanismNodes.map((node, index) => (
+                    <div
+                      key={node.no}
+                      style={{
+                        position: "absolute",
+                        left: `${7 + index * 28}%`,
+                        top: 0,
+                        transform: "translateX(-50%)",
+                        width: 230,
+                        textAlign: "center",
+                      }}
+                    >
+                      <div style={{ margin: "0 auto", width: 54, height: 54, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: dark ? "#fff" : "#000", color: dark ? "#000" : "#fff", fontWeight: 900, boxShadow: "0 14px 32px rgba(0,0,0,.18)" }}>
+                        {node.no}
+                      </div>
+                      <p className="mt-3 font-mono text-[9px] uppercase tracking-[0.18em] opacity-45">{node.title}</p>
+                      <p className="mt-1 text-sm font-semibold leading-5">{node.main}</p>
+                      <p className={cx("mt-1 text-xs leading-5", dark ? "text-white/50" : "text-black/48")}>{node.sub}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: isMobile ? "1fr" : "0.9fr 1.1fr 1fr 1.1fr", gap: 12 }}>
                 <div style={{ borderRadius: 20, padding: 14, background: dark ? "rgba(255,255,255,.06)" : "#fff" }}>
@@ -2371,7 +2431,10 @@ export default function FutureSasangOS() {
   }
 
   return (
-    <div className={cx("min-h-screen pb-10 transition-colors duration-500", dark ? "bg-[#050506] text-white" : "bg-[#f5f5f7] text-black")}>
+    <div
+      className={cx("mobile-no-x min-h-screen pb-10 transition-colors duration-500", dark ? "bg-[#050506] text-white" : "bg-[#f5f5f7] text-black")}
+      style={{ width: "100%", maxWidth: "100vw", overflowX: "hidden" }}
+    >
       <GlobalStyle />
       <div className={cx("pointer-events-none fixed inset-0", dark ? "bg-[radial-gradient(circle_at_50%_-10%,rgba(255,255,255,0.14),transparent_34%)]" : "bg-[radial-gradient(circle_at_50%_-10%,rgba(255,255,255,0.95),transparent_32%)]")} />
       <div className="relative z-10">
