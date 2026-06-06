@@ -146,7 +146,7 @@ const SECTORS = {
     },
     hero: {
       2050: { image: asset("2050s/01.Transfer City/hero/2050_Transfercity_Hero.webp"), video: asset("2050s/01.Transfer City/hero/transfer hero 2050.mp4") },
-      2075: { image: asset("2075/01.Transfer City/hero/2075_Transfer_Hero.webp"), video: asset("2075/01.Transfer City/hero/2075_Transfer_Hero.mp4") },
+      2075: { image: asset("2075/01.Transfer City/hero/2075_Transfer_Hero.webp"), video: "" },
     },
     current: {
       2050: [asset("2050s/01.Transfer City/current/transfer_2026_station.webp"), asset("2050s/01.Transfer City/current/transfer_2026_terminal.webp"), asset("2050s/01.Transfer City/current/transfer_2026_road_crossing.webp"), asset("2050s/01.Transfer City/satelite/transfer_2026_mobility_cluster_satellite.webp")],
@@ -159,7 +159,7 @@ const SECTORS = {
           ko: "통합 환승 데크",
           text: "A multi-level transfer platform connects Sasang Station, Busan–Gimhae Light Rail, West Busan Terminal, bus stops, taxi stands, autonomous shuttles, and slow mobility into one circulation system. It is not a simple pedestrian bridge. It becomes a living platform where users wait, check information, store luggage, rest shortly, access services, and move to the next mode without wandering through separated terminal edges and road crossings.",
           policy: "Sasang Transfer-Living District Special Plan: a transfer center should include waiting, information, luggage, short rest, and living services rather than only transport links.",
-          video: asset("2050s/01.Transfer City/integrated transfer deck/integrated_transfer_deck_loop.mp4"),
+          video: asset("2050s/01.Transfer City/hero/transfer hero 2050.mp4"),
           image: asset("2050s/01.Transfer City/integrated transfer deck/transfer_2050_integrated_deck.webp"),
           illust: asset("2050s/01.Transfer City/illust/integrated transfer deck.webp"),
           diagrams: [
@@ -705,7 +705,7 @@ function Intro({ onEnter }) {
                     key={`${item.year}-${item.view}`}
                     onClick={() => enterMode(item)}
                     className={cx(
-                      "group min-h-[205px] rounded-[1.8rem] border p-6 text-left transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/70",
+                      "group min-h-[150px] rounded-[1.4rem] border p-4 text-left transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/70 md:min-h-[205px] md:rounded-[1.8rem] md:p-6",
                       isLight
                         ? "border-white/15 bg-white text-black"
                         : "border-white/15 bg-white/[0.055] text-white hover:bg-white/10"
@@ -715,7 +715,7 @@ function Intro({ onEnter }) {
                       <p className={cx("font-mono text-xs uppercase tracking-[0.22em]", isLight ? "text-black/45" : "text-white/45")}>{item.year}</p>
                       <ArrowUpRight size={18} className={cx("transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-black/45" : "text-white/45")} />
                     </div>
-                    <h2 className="mt-10 text-3xl font-semibold tracking-[-0.05em]">{item.mode}</h2>
+                    <h2 className="mt-6 text-2xl font-semibold tracking-[-0.05em] md:mt-10 md:text-3xl">{item.mode}</h2>
                     <p className={cx("mt-4 text-sm leading-relaxed", isLight ? "text-black/55" : "text-white/55")}>{item.desc}</p>
                     <div className={cx("mt-6 inline-flex rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.16em]", isLight ? "border-black/10 bg-black/5 text-black/65" : "border-white/15 bg-white/[0.05] text-white/65")}>
                       {item.cta}
@@ -1048,6 +1048,15 @@ function GlobalStyle() {
       .font-mono {
         font-family: "SF Mono", "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, monospace;
       }
+      * { box-sizing: border-box; }
+      html, body { overflow-x: hidden; }
+      @media (max-width: 767px) {
+        body { -webkit-text-size-adjust: 100%; }
+        header nav { width: 100%; overflow-x: auto; scrollbar-width: none; }
+        header nav::-webkit-scrollbar { display: none; }
+        header nav button { flex: 1 0 auto; font-size: 12px !important; padding: 8px 10px !important; }
+        img, video, iframe { max-width: 100%; }
+      }
     `}</style>
   );
 }
@@ -1097,6 +1106,7 @@ function ThemePanel({ children, dark, className = "" }) {
 
 function TopNav({ view, setView, year, setYear, showKo, setShowKo }) {
   const dark = Number(year) === 2075;
+  const isMobile = useIsMobile(760);
   const navItems = [
     ["map", "Map"],
     ["article", "Article"],
@@ -1113,18 +1123,18 @@ function TopNav({ view, setView, year, setYear, showKo, setShowKo }) {
         color: dark ? "#fff" : "#000",
       }}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+      <div className={cx("mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2.5 md:gap-4 md:px-4 md:py-3", isMobile && "flex-wrap")}>
         <button onClick={() => setView("map")} className="flex items-center gap-2 text-sm font-semibold">
           <Sparkles size={18} />
           <span className="hidden sm:inline">Sasang OS</span>
         </button>
 
-        <nav className="flex items-center gap-1 rounded-full p-1" style={{ backgroundColor: dark ? "rgba(255,255,255,.08)" : "rgba(0,0,0,.045)" }}>
+        <nav className={cx("flex items-center gap-1 rounded-full p-1", isMobile && "order-3")} style={{ backgroundColor: dark ? "rgba(255,255,255,.08)" : "rgba(0,0,0,.045)" }}>
           {navItems.map(([id, label]) => (
             <button
               key={id}
               onClick={() => setView(id)}
-              className="rounded-full px-3 py-2 text-sm font-medium transition"
+              className="rounded-full px-3 py-2 text-sm font-medium transition whitespace-nowrap"
               style={{
                 backgroundColor: view === id ? (dark ? "#fff" : "#000") : "transparent",
                 color: view === id ? (dark ? "#000" : "#fff") : (dark ? "rgba(255,255,255,.78)" : "rgba(0,0,0,.72)"),
@@ -1136,10 +1146,10 @@ function TopNav({ view, setView, year, setYear, showKo, setShowKo }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <YearSwitch year={year} dark={dark} setYear={(next) => setYear(Number(next))} compact />
+          <YearSwitch year={year} dark={dark} setYear={(next) => setYear(Number(next))} compact={isMobile} />
           <button
             onClick={() => setShowKo((v) => !v)}
-            className="hidden rounded-full px-3 py-2 text-sm font-medium sm:block"
+            className="rounded-full px-3 py-2 text-xs font-medium sm:text-sm"
             style={{ backgroundColor: dark ? "rgba(255,255,255,.09)" : "rgba(0,0,0,.045)", color: dark ? "#fff" : "#000" }}
           >
             {showKo ? "EN" : "KR"}
@@ -1151,7 +1161,7 @@ function TopNav({ view, setView, year, setYear, showKo, setShowKo }) {
 }
 
 
-function YearSwitch({ year, setYear, dark }) {
+function YearSwitch({ year, setYear, dark, compact = false }) {
   return (
     <div className={cx("inline-flex rounded-full border p-1", dark ? "border-white/10 bg-white/10" : "border-black/5 bg-black/[0.035]")}>
       {[2050, 2075].map((item) => (
@@ -1159,7 +1169,7 @@ function YearSwitch({ year, setYear, dark }) {
           key={item}
           onClick={() => setYear(item)}
           className={cx(
-            "rounded-full px-4 py-2 text-sm transition",
+            cx("rounded-full transition", compact ? "px-2.5 py-1.5 text-xs" : "px-4 py-2 text-sm"),
             Number(year) === item ? (item === 2075 ? "bg-black text-white shadow-lg" : "bg-white text-black shadow-lg") : dark ? "text-white/45 hover:text-white" : "text-black/45 hover:text-black"
           )}
         >
@@ -1208,18 +1218,19 @@ function Media({ src, fallback, title, className = "", fit = "cover", isHero = f
 
 function MapMode({ year, setYear, showKo }) {
   const dark = Number(year) === 2075;
+  const isMobile = useIsMobile(760);
   const [selectedPurpose, setSelectedPurpose] = useState("transfer");
   const [activeSector, setActiveSector] = useState(null);
   const highlighted = new Set(PURPOSES.find((p) => p.id === selectedPurpose)?.sectors ?? []);
 
   return (
     <main
-      className="mx-auto max-w-7xl px-5 py-7"
+      className="mx-auto max-w-7xl px-3 py-4 md:px-5 md:py-7"
       style={{ backgroundColor: dark ? "#050506" : "#f5f5f7", color: dark ? "#fff" : "#000" }}
     >
       <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
-        <ThemePanel dark={dark} className="overflow-hidden p-3">
-          <div className="relative overflow-hidden rounded-[28px] bg-black">
+        <ThemePanel dark={dark} className="overflow-x-auto p-2 md:overflow-hidden md:p-3">
+          <div className="relative overflow-hidden rounded-[22px] bg-black md:rounded-[28px]" style={{ minWidth: isMobile ? 680 : undefined }}>
             <FallbackImage sources={MAP_IMAGES[year]} alt="Sasang satellite collision map" className="block w-full" />
 
             {COLLISION_BUTTONS.map((point) => {
@@ -1235,15 +1246,15 @@ function MapMode({ year, setYear, showKo }) {
                     transform: "translate(-50%, -50%)",
                     zIndex: isActive ? 9 : 7,
                     ...point.style,
-                    minWidth: 54,
-                    height: 36,
-                    borderRadius: 9,
-                    padding: "0 12px",
+                    minWidth: isMobile ? 38 : 54,
+                    height: isMobile ? 28 : 36,
+                    borderRadius: isMobile ? 7 : 9,
+                    padding: isMobile ? "0 8px" : "0 12px",
                     border: "1.5px solid rgba(255,255,255,.98)",
                     background: isActive ? "#000" : isPurpose ? "#fff" : "rgba(255,255,255,.96)",
                     color: isActive ? "#fff" : "#000",
                     boxShadow: "0 8px 20px rgba(0,0,0,.28)",
-                    fontSize: 18,
+                    fontSize: isMobile ? 14 : 18,
                     lineHeight: 1,
                     fontWeight: 900,
                   }}
@@ -1254,7 +1265,7 @@ function MapMode({ year, setYear, showKo }) {
               );
             })}
 
-            <div className="pointer-events-none absolute left-5 top-5 rounded-full border border-white/20 bg-black/35 px-4 py-2 text-xs text-white/80 backdrop-blur-xl">
+            <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-[10px] text-white/80 backdrop-blur-xl md:left-5 md:top-5 md:px-4 md:py-2 md:text-xs">
               Sasang Satellite Map / {year}
             </div>
           </div>
@@ -1325,6 +1336,7 @@ function MapMode({ year, setYear, showKo }) {
 
 function SectorDetail({ sectorId, year, showKo }) {
   const dark = Number(year) === 2075;
+  const isMobile = useIsMobile(760);
   const [diagramModal, setDiagramModal] = useState(null);
   const [selectedElementIndex, setSelectedElementIndex] = useState(0);
   const sector = SECTORS[sectorId];
@@ -1338,18 +1350,18 @@ function SectorDetail({ sectorId, year, showKo }) {
   }, [sectorId, year]);
 
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: 96 }}>
+    <section style={{ display: "flex", flexDirection: "column", gap: isMobile ? 42 : 96 }}>
       <Media
         src={hero.video}
         fallback={hero.image}
         title={`${sector.title} / ${year}`}
-        className="aspect-[16/11] min-h-[560px] rounded-none"
+        className={cx("rounded-[26px] md:rounded-none", isMobile ? "aspect-[16/10] min-h-[260px]" : "aspect-[16/11] min-h-[560px]")}
         isHero
         dark={dark}
       />
 
       <ThemePanel dark={dark} className="p-6 md:p-8">
-        <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] md:gap-8">
           <div>
             <div className="flex items-start gap-4">
               <div className={cx("flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] shadow-lg", dark ? "bg-white text-black" : "bg-black text-white")}>
@@ -1357,7 +1369,7 @@ function SectorDetail({ sectorId, year, showKo }) {
               </div>
               <div>
                 <p className={cx("font-mono text-xs uppercase tracking-[0.2em]", dark ? "text-white/45" : "text-black/35")}>{sector.no} / {year}</p>
-                <h2 className="mt-2 text-5xl font-semibold tracking-[-0.065em]">{sector.title}</h2>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.065em] md:text-5xl">{sector.title}</h2>
                 {showKo && <p className={cx("mt-2 text-sm", dark ? "text-white/55" : "text-black/45")}>{sector.ko}</p>}
               </div>
             </div>
@@ -1389,7 +1401,7 @@ function SectorDetail({ sectorId, year, showKo }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: elements.length <= 2 ? "minmax(170px, 0.36fr) minmax(0, 0.64fr)" : "minmax(170px, 0.30fr) minmax(0, 0.70fr)",
+            gridTemplateColumns: isMobile ? "1fr" : elements.length <= 2 ? "minmax(170px, 0.36fr) minmax(0, 0.64fr)" : "minmax(170px, 0.30fr) minmax(0, 0.70fr)",
             gap: 22,
             alignItems: "stretch",
           }}
@@ -1398,7 +1410,7 @@ function SectorDetail({ sectorId, year, showKo }) {
             onClick={() => setDiagramModal({ title: `${sector.title} Layers`, src: LAYER_DIAGRAMS[sectorId] })}
             className="block overflow-hidden rounded-[28px] bg-white p-3 text-black shadow-sm"
             title="Open layer diagram"
-            style={{ cursor: "zoom-in", minHeight: 280, maxHeight: 430 }}
+            style={{ cursor: "zoom-in", minHeight: isMobile ? 180 : 280, maxHeight: isMobile ? 260 : 430 }}
           >
             <img
               src={LAYER_DIAGRAMS[sectorId]}
@@ -1408,7 +1420,7 @@ function SectorDetail({ sectorId, year, showKo }) {
           </button>
 
           {elements.length > 0 && (
-            <div style={{ display: "grid", gridTemplateColumns: elements.length <= 2 ? "repeat(2, minmax(0, 1fr))" : "repeat(3, minmax(0, 1fr))", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : elements.length <= 2 ? "repeat(2, minmax(0, 1fr))" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? 10 : 16 }}>
               {elements.map((element, index) => {
                 const active = selectedElementIndex === index;
                 return (
@@ -1425,7 +1437,7 @@ function SectorDetail({ sectorId, year, showKo }) {
                         ? "border-white/14 bg-white/[0.10] text-white"
                         : "border-white/80 bg-white text-black"
                     )}
-                    style={{ minHeight: elements.length <= 2 ? 260 : 210, borderRadius: 26 }}
+                    style={{ minHeight: isMobile ? 150 : elements.length <= 2 ? 260 : 210, borderRadius: isMobile ? 20 : 26 }}
                   >
                     <img
                       src={element.illust || element.image}
@@ -1503,13 +1515,13 @@ function ElementFrame({ element, currentImages, showKo, dark, onOpenDiagram }) {
     <ThemePanel dark={dark} className="overflow-hidden p-5 md:p-6">
       <div className="mb-5">
         <p className={cx("font-mono text-[10px] uppercase tracking-[0.22em]", dark ? "text-white/35" : "text-black/35")}>Selected Element</p>
-        <h2 className="mt-2 text-5xl font-semibold tracking-[-0.07em]">{element.title}</h2>
+        <h2 className="mt-2 text-3xl font-semibold tracking-[-0.07em] md:text-5xl">{element.title}</h2>
         {showKo && <p className={cx("mt-2 text-sm", dark ? "text-white/45" : "text-black/45")}>{element.ko}</p>}
       </div>
 
       <div className="grid gap-7 lg:grid-cols-[1.02fr_0.98fr]">
         <div className="min-w-0">
-          <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="mb-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
             <p className={cx("font-mono text-[10px] uppercase tracking-[0.2em]", dark ? "text-white/35" : "text-black/35")}>Image Frame</p>
             <div className={cx("flex rounded-full p-1", dark ? "bg-white/10" : "bg-black/[0.04]")}>
               {tabs.map((item) => (
@@ -1525,7 +1537,7 @@ function ElementFrame({ element, currentImages, showKo, dark, onOpenDiagram }) {
           </div>
 
           <div className={cx("overflow-hidden rounded-[30px]", dark ? "bg-white/[0.06]" : "bg-black/[0.035]")}>
-            {active?.src && <img src={active.src} alt={`${element.title} ${active.label}`} className="h-full max-h-[500px] w-full object-cover" />}
+            {active?.src && <img src={active.src} alt={`${element.title} ${active.label}`} className="h-full max-h-[320px] w-full object-cover md:max-h-[500px]" />}
           </div>
         </div>
 
@@ -1632,7 +1644,7 @@ function FilmMode({ year, setView }) {
           className={cx("overflow-hidden rounded-[34px] shadow-2xl", dark ? "bg-black ring-1 ring-white/12" : "bg-black")}
           style={{
             width: "100%",
-            minHeight: isShorts ? "min(90vh, 1120px)" : "min(86vh, 1040px)",
+            minHeight: isShorts ? "min(82vh, 1120px)" : "auto",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -1648,7 +1660,7 @@ function FilmMode({ year, setView }) {
             style={{
               display: "block",
               width: isShorts ? "min(96vw, 620px)" : "100%",
-              height: isShorts ? "min(88vh, 1120px)" : "min(86vh, 1040px)",
+              height: isShorts ? "min(78vh, 1120px)" : "min(56.25vw, 780px)",
               aspectRatio: isShorts ? "9 / 16" : "16 / 9",
               border: 0,
               background: "#000",
@@ -1850,7 +1862,7 @@ function ArticleMethodSection({ dark, isMobile = false }) {
               </h3>
               <p className={cx("mt-2 text-sm leading-6", dark ? "text-white/58" : "text-black/52")}>{matrix.rank}</p>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 74px)", gap: 8 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, 74px)", gap: 8, width: isMobile ? "100%" : undefined }}>
               {[
                 ["I", matrix.influence],
                 ["D", matrix.dependence],
@@ -1951,8 +1963,8 @@ function ArticleMethodSection({ dark, isMobile = false }) {
             Instead of stacked cards, this mechanism works as a horizontal translation line: driver value → causal machine → spatial collision → sector output.
           </p>
 
-          <div style={{ marginTop: 24, overflowX: "auto", paddingBottom: 12 }}>
-            <div style={{ minWidth: isMobile ? 980 : 1160 }}>
+          <div style={{ marginTop: 24, overflowX: "auto", paddingBottom: 12, WebkitOverflowScrolling: "touch" }}>
+            <div style={{ minWidth: isMobile ? 760 : 1160 }}>
               <div style={{ position: "relative", height: 120 }}>
                 <div style={{ position: "absolute", left: 42, right: 42, top: 56, height: 2, background: dark ? "rgba(255,255,255,.28)" : "rgba(0,0,0,.20)" }} />
                 {mechanismNodes.map((node, index) => (
@@ -1963,7 +1975,7 @@ function ArticleMethodSection({ dark, isMobile = false }) {
                       left: `${7 + index * 28}%`,
                       top: 0,
                       transform: "translateX(-50%)",
-                      width: 230,
+                      width: isMobile ? 170 : 230,
                       textAlign: "center",
                     }}
                   >
@@ -2315,14 +2327,14 @@ function SiteCredit({ dark }) {
       }}
     >
       <div
-        className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-2 text-[10px] leading-4 backdrop-blur-xl"
+        className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-0.5 px-3 py-1.5 text-[9px] leading-3 backdrop-blur-xl sm:justify-between sm:px-4 sm:py-2 sm:text-[10px] sm:leading-4"
         style={{
           background: dark ? "rgba(5,5,6,.64)" : "rgba(245,245,247,.70)",
           borderTop: dark ? "1px solid rgba(255,255,255,.08)" : "1px solid rgba(0,0,0,.06)",
         }}
       >
         <span>OMA X HONGIK LAB: The empty city © JUWON LEE</span>
-        <span>wceo2001@gmail.com</span>
+        <span>메일 문의: wceo2001@gmail.com</span>
       </div>
     </div>
   );
