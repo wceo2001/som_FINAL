@@ -146,7 +146,7 @@ const SECTORS = {
     },
     hero: {
       2050: { image: asset("2050s/01.Transfer City/hero/2050_Transfercity_Hero.webp"), video: asset("2050s/01.Transfer City/hero/transfer hero 2050.mp4") },
-      2075: { image: asset("2075/01.Transfer City/hero/2075_Transfer_Hero.webp"), video: "" },
+      2075: { image: asset("2075/01.Transfer City/hero/2075_Transfer_Hero.mp4"), video: "" },
     },
     current: {
       2050: [asset("2050s/01.Transfer City/current/transfer_2026_station.webp"), asset("2050s/01.Transfer City/current/transfer_2026_terminal.webp"), asset("2050s/01.Transfer City/current/transfer_2026_road_crossing.webp"), asset("2050s/01.Transfer City/satelite/transfer_2026_mobility_cluster_satellite.webp")],
