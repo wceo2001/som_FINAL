@@ -556,7 +556,7 @@ function Intro({ onEnter }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-[300] flex items-center justify-center overflow-hidden bg-black px-5 text-white"
+      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black px-5 py-16 text-white md:items-center md:overflow-hidden md:py-0"
     >
       <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:48px_48px]" />
       <div className="pointer-events-none absolute left-1/2 top-[-280px] h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
@@ -1229,9 +1229,13 @@ function MapMode({ year, setYear, showKo }) {
       style={{ backgroundColor: dark ? "#050506" : "#f5f5f7", color: dark ? "#fff" : "#000" }}
     >
       <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
-        <ThemePanel dark={dark} className="overflow-x-auto p-2 md:overflow-hidden md:p-3">
-          <div className="relative overflow-hidden rounded-[22px] bg-black md:rounded-[28px]" style={{ minWidth: isMobile ? 680 : undefined }}>
-            <FallbackImage sources={MAP_IMAGES[year]} alt="Sasang satellite collision map" className="block w-full" />
+        <ThemePanel dark={dark} className="p-2 md:p-3">
+          <div className="relative flex justify-center overflow-hidden rounded-[22px] bg-black md:block md:rounded-[28px]">
+            <FallbackImage
+              sources={MAP_IMAGES[year]}
+              alt="Sasang satellite collision map"
+              className={isMobile ? "block max-h-[56vh] w-full object-contain" : "block w-full"}
+            />
 
             {COLLISION_BUTTONS.map((point) => {
               const isActive = activeSector === point.sector;
@@ -1844,7 +1848,7 @@ function ArticleMethodSection({ dark, isMobile = false }) {
         </div>
       </aside>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 22, minWidth: 0, maxWidth: "100%" }}>
         <div>
           <p className={cx("font-mono text-xs uppercase tracking-[0.24em]", dark ? "text-white/45" : "text-black/35")}>Method / Driver Reading</p>
           <h2 className={cx("mt-4 font-semibold tracking-[-0.07em]", isMobile ? "text-4xl" : "text-5xl")}>From Matrix to Scenario Logic</h2>
@@ -1964,18 +1968,24 @@ function ArticleMethodSection({ dark, isMobile = false }) {
           </p>
 
           <div style={{ marginTop: 24, overflowX: "auto", paddingBottom: 12, WebkitOverflowScrolling: "touch" }}>
-            <div style={{ minWidth: isMobile ? 760 : 1160 }}>
-              <div style={{ position: "relative", height: 120 }}>
-                <div style={{ position: "absolute", left: 42, right: 42, top: 56, height: 2, background: dark ? "rgba(255,255,255,.28)" : "rgba(0,0,0,.20)" }} />
+            <div style={{ minWidth: isMobile ? "100%" : 1160, maxWidth: "100%" }}>
+              <div style={{ position: "relative", height: isMobile ? 430 : 120 }}>
+                <div
+                  style={
+                    isMobile
+                      ? { position: "absolute", left: "50%", top: 28, bottom: 28, width: 2, transform: "translateX(-50%)", background: dark ? "rgba(255,255,255,.22)" : "rgba(0,0,0,.16)" }
+                      : { position: "absolute", left: 42, right: 42, top: 56, height: 2, background: dark ? "rgba(255,255,255,.28)" : "rgba(0,0,0,.20)" }
+                  }
+                />
                 {mechanismNodes.map((node, index) => (
                   <div
                     key={node.no}
                     style={{
                       position: "absolute",
-                      left: `${7 + index * 28}%`,
-                      top: 0,
+                      left: isMobile ? "50%" : `${7 + index * 28}%`,
+                      top: isMobile ? index * 102 : 0,
                       transform: "translateX(-50%)",
-                      width: isMobile ? 170 : 230,
+                      width: isMobile ? "min(100%, 280px)" : 230,
                       textAlign: "center",
                     }}
                   >
@@ -1989,7 +1999,7 @@ function ArticleMethodSection({ dark, isMobile = false }) {
                 ))}
               </div>
 
-              <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "0.9fr 1.1fr 1fr 1.1fr", gap: 12 }}>
+              <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: isMobile ? "1fr" : "0.9fr 1.1fr 1fr 1.1fr", gap: 12 }}>
                 <div style={{ borderRadius: 20, padding: 14, background: dark ? "rgba(255,255,255,.06)" : "#fff" }}>
                   <p className="font-mono text-[9px] opacity-45">VALUE</p>
                   <p className={cx("mt-2 text-sm leading-6", dark ? "text-white/62" : "text-black/58")}>{matrix.matrix}</p>
