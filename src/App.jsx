@@ -146,7 +146,7 @@ const SECTORS = {
     },
     hero: {
       2050: { image: asset("2050s/01.Transfer City/hero/2050_Transfercity_Hero.webp"), video: asset("2050s/01.Transfer City/hero/transfer hero 2050.mp4") },
-      2075: { image: asset("2075/01.Transfer City/hero/2075_Transfer_Hero.webp"), video: asset("2075/01.Transfer City/hero/2075_Transfer_Hero_loop.mp4") },
+      2075: { image: asset("2075/01.Transfer City/hero/2075_Transfer_Hero.webp"), video: "" },
     },
     current: {
       2050: [asset("2050s/01.Transfer City/current/transfer_2026_station.webp"), asset("2050s/01.Transfer City/current/transfer_2026_terminal.webp"), asset("2050s/01.Transfer City/current/transfer_2026_road_crossing.webp"), asset("2050s/01.Transfer City/satelite/transfer_2026_mobility_cluster_satellite.webp")],
@@ -556,13 +556,14 @@ function Intro({ onEnter }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-black px-5 py-16 text-white md:items-center md:overflow-hidden md:py-0"
+      className="fixed inset-0 z-[300] flex items-start justify-center overflow-x-hidden overflow-y-auto bg-black px-4 py-14 text-white md:items-center md:overflow-hidden md:py-0"
+      style={{ width: "100vw", maxWidth: "100vw", overscrollBehaviorX: "none", touchAction: "pan-y" }}
     >
       <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:48px_48px]" />
       <div className="pointer-events-none absolute left-1/2 top-[-280px] h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-260px] right-[-160px] h-[520px] w-[520px] rounded-full bg-white/5 blur-3xl" />
 
-      <div className="absolute left-6 right-6 top-6 flex justify-between font-mono text-[10px] uppercase tracking-[0.24em] text-white/45 md:left-10 md:right-10">
+      <div className="absolute left-4 right-4 top-5 flex justify-between gap-3 overflow-hidden font-mono text-[9px] uppercase tracking-[0.14em] text-white/45 md:left-10 md:right-10 md:top-6 md:text-[10px] md:tracking-[0.24em]">
         <span>SASANG OS</span>
         <span>OPERATING MANUAL</span>
       </div>
@@ -575,7 +576,7 @@ function Intro({ onEnter }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
             transition={{ duration: 0.45 }}
-            className="relative w-[min(92vw,680px)] rounded-[2rem] border border-white/10 bg-black/70 p-6 shadow-2xl backdrop-blur-xl md:p-8"
+            className="relative w-full max-w-[680px] rounded-[2rem] border border-white/10 bg-black/70 p-6 shadow-2xl backdrop-blur-xl md:p-8"
           >
             <div className="mb-6 flex items-center gap-3">
               <span className="h-2 w-2 animate-pulse rounded-full bg-white shadow-[0_0_22px_rgba(255,255,255,0.95)]" />
@@ -607,7 +608,7 @@ function Intro({ onEnter }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
             transition={{ duration: 0.45 }}
-            className="relative w-[min(92vw,680px)] rounded-[2rem] border border-white/10 bg-black/70 p-6 text-center shadow-2xl backdrop-blur-xl md:p-9"
+            className="relative w-full max-w-[680px] rounded-[2rem] border border-white/10 bg-black/70 p-6 text-center shadow-2xl backdrop-blur-xl md:p-9"
           >
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/45">LANGUAGE SETTING</p>
             <h1 className="mt-6 text-4xl font-semibold tracking-[-0.06em] md:text-6xl">{copy.languageTitle}</h1>
@@ -642,7 +643,7 @@ function Intro({ onEnter }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
             transition={{ duration: 0.45 }}
-            className="relative w-[min(94vw,900px)] rounded-[2rem] border border-white/10 bg-black/70 p-6 shadow-2xl backdrop-blur-xl md:p-9"
+            className="relative w-full max-w-[900px] rounded-[2rem] border border-white/10 bg-black/70 p-6 shadow-2xl backdrop-blur-xl md:p-9"
           >
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/45">{copy.introKicker}</p>
             <h1 className="mt-5 text-4xl font-semibold tracking-[-0.06em] md:text-6xl">{copy.introTitle}</h1>
@@ -679,7 +680,7 @@ function Intro({ onEnter }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
             transition={{ duration: 0.45 }}
-            className="relative w-[min(96vw,1080px)] rounded-[2rem] border border-white/10 bg-black/70 p-6 shadow-2xl backdrop-blur-xl md:p-9"
+            className="relative w-full max-w-[1080px] rounded-[2rem] border border-white/10 bg-black/70 p-5 shadow-2xl backdrop-blur-xl md:p-9"
           >
             <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
               <div>
@@ -705,7 +706,7 @@ function Intro({ onEnter }) {
                     key={`${item.year}-${item.view}`}
                     onClick={() => enterMode(item)}
                     className={cx(
-                      "group min-h-[150px] rounded-[1.4rem] border p-4 text-left transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/70 md:min-h-[205px] md:rounded-[1.8rem] md:p-6",
+                      "group min-h-[150px] rounded-[1.4rem] border p-4 text-left transition hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/70 md:min-h-[205px] md:hover:-translate-y-1 md:rounded-[1.8rem] md:p-6",
                       isLight
                         ? "border-white/15 bg-white text-black"
                         : "border-white/15 bg-white/[0.055] text-white hover:bg-white/10"
@@ -713,7 +714,7 @@ function Intro({ onEnter }) {
                   >
                     <div className="flex items-start justify-between gap-3">
                       <p className={cx("font-mono text-xs uppercase tracking-[0.22em]", isLight ? "text-black/45" : "text-white/45")}>{item.year}</p>
-                      <ArrowUpRight size={18} className={cx("transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-black/45" : "text-white/45")} />
+                      <ArrowUpRight size={18} className={cx("transition md:group-hover:translate-x-0.5 md:group-hover:-translate-y-0.5", isLight ? "text-black/45" : "text-white/45")} />
                     </div>
                     <h2 className="mt-6 text-2xl font-semibold tracking-[-0.05em] md:mt-10 md:text-3xl">{item.mode}</h2>
                     <p className={cx("mt-4 text-sm leading-relaxed", isLight ? "text-black/55" : "text-white/55")}>{item.desc}</p>
@@ -734,7 +735,7 @@ function Intro({ onEnter }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
             transition={{ duration: 0.45 }}
-            className="relative w-[min(92vw,680px)] rounded-[2rem] border border-white/10 bg-black/70 p-6 text-center shadow-2xl backdrop-blur-xl md:p-9"
+            className="relative w-full max-w-[680px] rounded-[2rem] border border-white/10 bg-black/70 p-6 text-center shadow-2xl backdrop-blur-xl md:p-9"
           >
             <div className="mx-auto mb-7 h-2 w-2 animate-pulse rounded-full bg-white shadow-[0_0_24px_rgba(255,255,255,0.85)]" />
             <p className="whitespace-pre-line font-mono text-sm leading-7 tracking-[0.08em] text-white/85 md:text-base">
@@ -1048,6 +1049,7 @@ function GlobalStyle() {
         max-width: 100%;
         min-width: 0;
         overflow-x: hidden;
+        overscroll-behavior-x: none;
       }
       body {
         position: relative;
@@ -1062,9 +1064,12 @@ function GlobalStyle() {
         html, body, #root {
           width: 100vw;
           max-width: 100vw;
-          overflow-x: hidden !important;
+          overflow-x: clip !important;
+          overscroll-behavior-x: none !important;
         }
-        body { -webkit-text-size-adjust: 100%; }
+        body { -webkit-text-size-adjust: 100%; position: relative; }
+        body > * { max-width: 100vw; }
+        .fixed { max-width: 100vw; }
         main, article, section, header { max-width: 100vw; overflow-x: hidden; }
         header nav {
           width: 100%;
